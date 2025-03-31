@@ -3,36 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Admin - Cart Items</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-    }
-
-    table {
-      border-collapse: collapse;
-      width: 80%;
-      margin: auto;
-      background-color: white;
-      box-shadow: 0 0 10px #aaa;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    th {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    h2 {
-      text-align: center;
-    }
-  </style>
 </head>
 <body>
   <h2>🛒 Cart Items (Admin View)</h2>
@@ -45,29 +15,34 @@
         <th>Time Added</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- Data will be added here by JavaScript -->
-    </tbody>
+    <tbody></tbody>
   </table>
 
   <script>
-    fetch('/cart-data')
-      .then(response => response.json())
-      .then(data => {
-        const tableBody = document.querySelector("#cart-table tbody");
-        tableBody.innerHTML = ''; // clear previous rows if any
-        data.forEach(item => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${item.id}</td>
-            <td>${item.product}</td>
-            <td>${item.price}</td>
-            <td>${item.addedAt}</td>
-          `;
-          tableBody.appendChild(row);
-        });
-      });
+    const backendURL = "https://grocerymanagement-production.up.railway.app";
+
+    function fetchCartData() {
+      fetch(`${backendURL}/cart-data`)
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.querySelector("#cart-table tbody");
+          tableBody.innerHTML = '';
+          data.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${item.id}</td>
+              <td>${item.product}</td>
+              <td>${item.price}</td>
+              <td>${item.addedAt}</td>
+            `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error("Error fetching cart data:", error));
+    }
+
+    fetchCartData();
+    setInterval(fetchCartData, 5000); 
   </script>
-  
 </body>
 </html>
