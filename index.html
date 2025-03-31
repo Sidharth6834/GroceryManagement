@@ -27,11 +27,12 @@
   <div style="margin: 20px;">
     <h3>Manual Add to Cart Test</h3>
     <button id="reset-cart">Reset Cart</button>
-
     <button onclick="addToCart('Apple', 30)">Add Apple to Cart</button>
   </div>
 
   <script>
+    const backendURL = "https://grocerymanagement-production.up.railway.app";
+
     const items = [
       { name: "Milk", price: 30, image: "milk.jpg" },
       { name: "Bread", price: 25, image: "bread.jpg" },
@@ -60,7 +61,7 @@
       row.innerHTML = `<td>${product}</td><td>₹${price}</td>`;
       cartTable.appendChild(row);
 
-      fetch("/add-to-cart", {
+      fetch(`${backendURL}/add-to-cart`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product, price })
@@ -71,21 +72,17 @@
       });
     }
     
-document.getElementById("reset-cart").addEventListener("click", function () {
-    if (confirm("Are you sure you want to reset the cart?")) {
-        fetch('/reset-cart', { method: 'DELETE' })
-            .then(response => response.text())
-            .then(message => {
-                alert(message); // Show success message
-                document.querySelector("cart").innerHTML = ""; // Clear frontend cart UI
-            })
-            .catch(error => console.error("Error:", error));
-    }
-});
-
-
-    
-
+    document.getElementById("reset-cart").addEventListener("click", function () {
+      if (confirm("Are you sure you want to reset the cart?")) {
+        fetch(`${backendURL}/reset-cart`, { method: 'DELETE' })
+          .then(response => response.text())
+          .then(message => {
+            alert(message);
+            document.querySelector("#cart").innerHTML = ""; // Clear frontend cart UI
+          })
+          .catch(error => console.error("Error:", error));
+      }
+    });
   </script>
 </body>
 </html>
