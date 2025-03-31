@@ -60,3 +60,13 @@ app.get('/cart-data', (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+// Reset Cart API - Clears all cart data
+app.delete('/reset-cart', (req, res) => {
+    db.run('DELETE FROM cart', function (err) {
+        if (err) {
+            console.error('DB Error:', err);
+            return res.status(500).send('DB Error');
+        }
+        res.send('Cart has been reset!');
+    });
+});
